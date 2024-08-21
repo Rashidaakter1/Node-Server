@@ -7,6 +7,11 @@ const createUserFromDb = async (user: TUser) => {
     throw new Error("User already exists");
   }
   const result = await UserModel.create(user);
+  console.log(result);
+  const userWithoutPassword = await UserModel.findById(result._id).select(
+    "-password"
+  );
+  console.log(userWithoutPassword);
   return result;
 };
 
@@ -29,8 +34,17 @@ const getSingleUserFromDb = async (userId: number) => {
   return user;
 };
 
+//get all the orders from database from a user
+const getAllOrdersFromDb = async (userId: number) => {
+  const result = await UserModel.findOne({ userId }).select({ orders: 1 });
+  return result;
+};
+
+
 export const userService = {
   createUserFromDb,
   getAllUsersFromDb,
   getSingleUserFromDb,
+  getAllOrdersFromDb,
+
 };

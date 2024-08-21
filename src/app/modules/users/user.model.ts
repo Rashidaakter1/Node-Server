@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { Orders, TUser, UserExtendModel } from "./user.interface";
 import * as bcrypt from "bcrypt";
 import config from "../../config";
-import { NextFunction } from "express";
 
 const { Schema, model } = mongoose;
 

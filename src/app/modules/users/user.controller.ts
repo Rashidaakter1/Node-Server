@@ -59,8 +59,54 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const allOrders = await userService.getAllOrdersFromDb(userId);
+    res.status(200).json({
+      success: true,
+      message: "Order fetched successfully!",
+      data: allOrders,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Orders not found",
+      error: error,
+    });
+  }
+};
+
+const getTotalPriceOfOrders = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const allOrders = await userService.getAllOrdersFromDb(userId);
+
+    const ordersArray = allOrders?.orders;
+    let totalPrice = 0;
+    ordersArray?.forEach((order) => {
+      console.log(order.price);
+      totalPrice = totalPrice + order.price * order.quantity;
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Total price calculated successfully!",
+      data: totalPrice,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Orders not found",
+      error: error,
+    });
+  }
+};
+
 export const userController = {
   createUser,
   getAllUsers,
   getSingleUser,
+  getAllOrders,
+  getTotalPriceOfOrders,
 };
