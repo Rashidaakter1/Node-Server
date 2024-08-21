@@ -1,10 +1,12 @@
-import { User } from "./user.interface";
+import { TUser } from "./user.interface";
 import { UserModel } from "./user.model";
 
 // crete user from Database
-const createUserFromDb = async (user: User) => {
+const createUserFromDb = async (user: TUser) => {
+  if (await UserModel.isUserExist(user.userId)) {
+    throw new Error("User already exists");
+  }
   const result = await UserModel.create(user);
-  console.log(result);
   return result;
 };
 
