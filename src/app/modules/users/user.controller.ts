@@ -59,6 +59,25 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const createOrdersFromUser = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const orders = await req.body;
+    const result = await userService.createOrderFromDb(orders, userId);
+    res.status(200).json({
+      success: true,
+      message: "order is created successfully!",
+      data: null,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "something went wrong",
+      error: error,
+    });
+  }
+};
+
 const getAllOrders = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -92,7 +111,9 @@ const getTotalPriceOfOrders = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Total price calculated successfully!",
-      data: totalPrice,
+      data: {
+        totalPrice: totalPrice,
+      },
     });
   } catch (error: any) {
     res.status(400).json({
@@ -109,4 +130,5 @@ export const userController = {
   getSingleUser,
   getAllOrders,
   getTotalPriceOfOrders,
+  createOrdersFromUser,
 };

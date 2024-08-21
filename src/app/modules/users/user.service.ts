@@ -1,5 +1,5 @@
-import { TUser } from "./user.interface";
-import { UserModel } from "./user.model";
+import { Orders, TUser } from "./user.interface";
+import { OrderModel, UserModel } from "./user.model";
 
 // crete user from Database
 const createUserFromDb = async (user: TUser) => {
@@ -27,6 +27,13 @@ const getAllUsersFromDb = async () => {
 
   return result;
 };
+// post orders from specific user
+const createOrderFromDb = async (orders: Orders, userId: number) => {
+  const user = await UserModel.findOne({ userId });
+  const result = await OrderModel.create(orders);
+  return result;
+  // return user?.orders.push(result);
+};
 
 // get specific User from userId
 const getSingleUserFromDb = async (userId: number) => {
@@ -40,11 +47,10 @@ const getAllOrdersFromDb = async (userId: number) => {
   return result;
 };
 
-
 export const userService = {
   createUserFromDb,
   getAllUsersFromDb,
   getSingleUserFromDb,
   getAllOrdersFromDb,
-
+  createOrderFromDb,
 };

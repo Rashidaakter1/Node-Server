@@ -12,4 +12,5 @@ userRouter.get(
   userController.getTotalPriceOfOrders
 );
 
+userRouter.put("/users/:userId/orders", userController.createOrdersFromUser);
 export default userRouter;

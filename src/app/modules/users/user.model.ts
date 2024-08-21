@@ -46,7 +46,10 @@ userSchema.pre("save", async function (next) {
     user.password,
     Number(config.bcrypt__saltRound)
   );
+
+
   next();
+
 });
 
 userSchema.post("save", async function (doc, next) {
@@ -54,5 +57,12 @@ userSchema.post("save", async function (doc, next) {
   next();
 });
 
+
+
+
+
 // 3. Create a Model.
 export const UserModel = model<TUser, UserExtendModel>("User", userSchema);
+
+
+export const OrderModel = model<Orders>("Order",OrdersSchema)
