@@ -32,6 +32,7 @@ const userSchema = new Schema<TUser, UserExtendModel>({
   },
 
   orders: [OrdersSchema],
+  isDeleted: { type: Boolean, default: false },
 });
 
 userSchema.statics.isUserExist = async function (id: number) {
@@ -47,9 +48,7 @@ userSchema.pre("save", async function (next) {
     Number(config.bcrypt__saltRound)
   );
 
-
   next();
-
 });
 
 userSchema.post("save", async function (doc, next) {
@@ -57,12 +56,22 @@ userSchema.post("save", async function (doc, next) {
   next();
 });
 
+userSchema.pre("find", async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+userSchema.pre("findOne", async function (next) {
+  this.select("-password");
+  this.find({ isDeleted: { $ne: true } }); 
+  next();
+});
 
-
-
+userSchema.pre("findOneAndUpdate", async function (next) {
+  this.select("-password");
+  next();
+});
 
 // 3. Create a Model.
 export const UserModel = model<TUser, UserExtendModel>("User", userSchema);
 
-
-export const OrderModel = model<Orders>("Order",OrdersSchema)
+export const OrderModel = model<Orders>("Order", OrdersSchema);

@@ -38,10 +38,7 @@ const validateUser = z.object({
     })
     .max(20, { message: "Last name should be within 20 characters" })
     .min(2, { message: "" }),
-  password: z
-    .string()
-    .max(20, { message: "Must be 20 or more characters long" })
-    .min(5, { message: "Must be 5 or more characters long" }),
+  password: z.string().min(5, { message: "Must be 5 or more characters long" }),
   fullName: userNameValidation,
   age: z.number().min(14).max(90, { message: "Age can not be  above 90" }),
   email: z.string().email({ message: "Invalid email address" }),
@@ -49,6 +46,7 @@ const validateUser = z.object({
   hobbies: z.array(z.string().min(1)),
   address: addressValidation,
   orders: z.array(OrdersSchema),
+  isDeleted: z.boolean().default(false),
 });
 
 export default validateUser;

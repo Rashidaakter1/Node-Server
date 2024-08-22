@@ -40,8 +40,9 @@ const getAllUsers = async (req: Request, res: Response) => {
 
 const getSingleUser = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId);
-    const result = await userService.getSingleUserFromDb(userId);
+    const { userId } = req.params;
+    const result = await userService.getSingleUserFromDb(Number(userId));
+
     res.status(200).json({
       success: true,
       message: "Users fetched successfully!",
@@ -59,11 +60,52 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const updatedUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const user = await req.body;
+    const zodParseData = validateUser.parse(user);
+    const result = await userService.updateUserFromDb(
+      Number(userId),
+      zodParseData
+    );
+    res.status(200).json({
+      success: true,
+      message: "User Updated successfully!",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "something went wrong",
+      error: error,
+    });
+  }
+};
+
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const updatedUser = await userService.deleteUserFromDb(Number(userId));
+    console.log(updatedUser);
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully!",
+      data: null,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "something went wrong",
+      error: error,
+    });
+  }
+};
 const createOrdersFromUser = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId);
+    const { userId } = req.params;
     const orders = await req.body;
-    const result = await userService.createOrderFromDb(orders, userId);
+    const result = await userService.createOrderFromDb(orders, Number(userId));
     res.status(200).json({
       success: true,
       message: "order is created successfully!",
@@ -80,8 +122,8 @@ const createOrdersFromUser = async (req: Request, res: Response) => {
 
 const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId);
-    const allOrders = await userService.getAllOrdersFromDb(userId);
+    const { userId } = req.params;
+    const allOrders = await userService.getAllOrdersFromDb(Number(userId));
     res.status(200).json({
       success: true,
       message: "Order fetched successfully!",
@@ -98,8 +140,8 @@ const getAllOrders = async (req: Request, res: Response) => {
 
 const getTotalPriceOfOrders = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId);
-    const allOrders = await userService.getAllOrdersFromDb(userId);
+    const { userId } = req.params;
+    const allOrders = await userService.getAllOrdersFromDb(Number(userId));
 
     const ordersArray = allOrders?.orders;
     let totalPrice = 0;
@@ -131,4 +173,6 @@ export const userController = {
   getAllOrders,
   getTotalPriceOfOrders,
   createOrdersFromUser,
+  updatedUser,
+  deleteUser,
 };
