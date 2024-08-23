@@ -105,7 +105,7 @@ The Order model includes the following fields:
 #### Soft delete a user by marking them as isDeleted.
 
 ```http
-DELETE /api/users/:userId
+   DELETE /api/users/:userId
 ```
 
 ### Order's API Endpoints
