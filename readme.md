@@ -5,6 +5,10 @@
 
 Develop a Node.js Express application using TypeScript as the programming language, integrating MongoDB with Mongoose for user data and order management. Ensure data integrity through validation using Zod.
 
+
+## Link 
+
+[Node-server](https://node-server-alpha-six.vercel.app/)
 ## Tech Stack
 
 **Server:** 
